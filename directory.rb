@@ -1,7 +1,4 @@
-
-# We're using the each() method to iterate over an array of students.
-#  How can you modify the program to print a number before the name of each student,
-#   e.g. "1. Dr. Hannibal Lecter"? Hint: look into each_with_index()
+# Modify your program to only print the students whose name begins with a specific letter.
 
 
 
@@ -25,7 +22,9 @@ end
 
 def print(students)
   students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    if student[:name].start_with?('H')
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 
