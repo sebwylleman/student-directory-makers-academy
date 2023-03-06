@@ -8,7 +8,7 @@ def input_students
   students = []
   name = gets.chomp
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :november, hobbies: "----"}
     puts "Now we have #{students.count} students"
     name = gets.chomp
   end
@@ -22,9 +22,7 @@ end
 
 def print(students)
   students.each_with_index do |student, index|
-    if student[:name].start_with?('H')
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    end
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) hobbies: #{student[:hobbies]}"
   end
 end
 
