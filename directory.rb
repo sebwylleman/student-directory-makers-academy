@@ -3,12 +3,14 @@ def input_students
   puts "To finish, just hit return twice"
   students = []
   input = gets.chomp
+  input = input.delete_suffix("\n")
   while !input.empty? do
     name, cohort = input.split(/\s*,\s*/)
     cohort == nil ? cohort = "november".to_sym : cohort
     students << {name: name, cohort: cohort, hobbies: "----"}
     puts "Now we have #{students.count} students"
     input = gets.chomp
+    input = input.delete_suffix("\n")
   end
   students
 end
@@ -30,7 +32,11 @@ def print(students)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  if names.count > 1
+    puts "Overall, we have #{names.count} great students"
+  else 
+    puts "We have #{names.count} great student"
+  end
 end
 
 students = input_students
