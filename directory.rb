@@ -1,4 +1,31 @@
-@students = []
+@students = [] # an empty array accessible to all methods
+
+def input_students
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+  # get the first name
+  name = gets.chomp
+  # while the name is not empty, repeat this code
+  while !name.empty? do
+    # add the student hash to the array
+    @students << {name: name, cohort: :november}
+    puts "Now we have #{@students.count} students"
+    # get another name from the user
+    name = gets.chomp
+  end
+end
+
+def save_students
+  # open the file for writing
+  file = File.open("students.csv", "w")
+  # iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
 
 def interactive_menu
   loop do
@@ -7,24 +34,11 @@ def interactive_menu
   end
 end
 
-def process(selection)
-  case selection
-  when "1"
-    students = input_students
-  when "2"
-    show_students
-  when "9"
-    exit
-  else
-    puts "I don't know what you meant, try again"
-  end
-end
-
-
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "9. Exit"
+  puts "3. Save the list to students.csv"
+  puts "9. Exit" # 9 because we'll be adding more items
 end
 
 def show_students
@@ -33,18 +47,18 @@ def show_students
   print_footer
 end
 
-def input_students
-  puts "Please enter the students and cohorts of the students, separated by a comma"
-  puts "To finish, just hit return twice"
-  input = gets.chomp
-  input = input.delete_suffix("\n")
-  while !input.empty? do
-    name, cohort = input.split(/\s*,\s*/)
-    cohort == nil ? cohort = "november".to_sym : cohort
-    @students << {name: name, cohort: cohort, hobbies: "----"}
-    puts "Now we have #{@students.count} students"
-    input = gets.chomp
-    input = input.delete_suffix("\n")
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "3"
+    save_students
+  when "9"
+    exit # this will cause the program to terminate
+  else
+    puts "I don't know what you meant, try again"
   end
 end
 
@@ -53,23 +67,14 @@ def print_header
   puts "-------------"
 end
 
-
 def print_student_list
-  students_by_cohort = @students.group_by {|student| student[:cohort]}
-  students_by_cohort.each do |cohort, student|
-    student.each_with_index do |student, index|
-      puts "#{student[:name]} (#{student[:cohort]} cohort) hobbies: #{student[:hobbies]}".center(10)
-    end
+  @students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
   end
-  students_by_cohort
 end
 
 def print_footer
-  if @students.count > 1
-    puts "Overall, we have #{@students.count} great students"
-  else 
-    puts "We have #{@students.count} great student"
-  end
+  puts "Overall, we have #{@students.count} great students"
 end
 
-interactive_menu()
+interactive_menu
