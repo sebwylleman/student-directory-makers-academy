@@ -1,10 +1,11 @@
 @students = [] # accessible to all methods
 
 def try_load_students
-  filename = ARGV.first
+  puts "Enter filename to load, press enter for default"
+  filename = gets.chomp
   if filename.nil?
      load_students
-     puts "Loaded #{@students.count} students from 'students.csv'"
+     puts "Loaded #{@students.count} students from default file:'students.csv'"
   elsif File.exist?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} students from #{filename}"
@@ -31,19 +32,21 @@ def input_students
   puts "Please enter the names and cohorts of the students, separated by a comma"
   puts "To finish, just hit return twice"
 
-  input = STDIN.gets.chomp
+  input = gets.chomp
   while !input.empty? do
     name, cohort = input.split(/\s*,\s*/)
     cohort == nil ? cohort = "november".to_sym : cohort
     add_student(name, cohort)
     puts "Now we have #{@students.count} students"
-    input = STDIN.gets.chomp
+    input = gets.chomp
   end
 end
 
 def save_students
   # open the file for writing
-  file = File.open("students.csv", "w")
+  puts "enter file name followed by .csv extension"
+  chosen_file = gets.chomp
+  file = File.open(chosen_file, "w")
   # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
@@ -56,16 +59,16 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    process(gets.chomp)
   end
 end
 
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
+  puts "3. Save the list"
   puts "4. Load the student list"
-  puts "9. Exit"
+  puts "5. Exit"
 end
 
 def show_students
@@ -77,14 +80,19 @@ end
 def process(selection)
   case selection
   when "1"
+    puts "option 1 selected"
     input_students
   when "2"
+    puts "option 2 selected"
     show_students
   when "3"
+    puts "option 3 selected"
     save_students
   when "4"
+    puts "option 4 selected"
     try_load_students
-  when "9"
+  when "5"
+    puts "Goodbye"
     exit
   else
     puts "I don't know what you meant, try again"
