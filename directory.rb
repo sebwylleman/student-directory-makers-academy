@@ -1,43 +1,51 @@
+@students = []
+
 def interactive_menu
-  students = []
   loop do
-    # 1. print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # 9 because we'll be adding more items
-    # 2. read the input and save it into a variable
-    selection = gets.chomp
-    # 3. do what the user has asked
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit # this will cause the program to terminate
-    else
-      puts "I don't know what you meant, try again"
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
 
+def process(selection)
+  case selection
+  when "1"
+    students = input_students
+  when "2"
+    show_students
+  when "9"
+    exit
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
 def input_students
-  puts "Please enter the names and cohorts of the students, separated by a comma"
+  puts "Please enter the students and cohorts of the students, separated by a comma"
   puts "To finish, just hit return twice"
-  students = []
   input = gets.chomp
   input = input.delete_suffix("\n")
   while !input.empty? do
     name, cohort = input.split(/\s*,\s*/)
     cohort == nil ? cohort = "november".to_sym : cohort
-    students << {name: name, cohort: cohort, hobbies: "----"}
-    puts "Now we have #{students.count} students"
+    @students << {name: name, cohort: cohort, hobbies: "----"}
+    puts "Now we have #{@students.count} students"
     input = gets.chomp
     input = input.delete_suffix("\n")
   end
-  students
 end
 
 def print_header
@@ -46,21 +54,21 @@ def print_header
 end
 
 
-def print(students)
-  students_by_cohort = students.group_by {|student| student[:cohort]}
+def print_student_list
+  students_by_cohort = @students.group_by {|student| student[:cohort]}
   students_by_cohort.each do |cohort, student|
     student.each_with_index do |student, index|
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) hobbies: #{student[:hobbies]}".center(50)
+      puts "#{student[:name]} (#{student[:cohort]} cohort) hobbies: #{student[:hobbies]}".center(10)
     end
   end
   students_by_cohort
 end
 
-def print_footer(names)
-  if names.count > 1
-    puts "Overall, we have #{names.count} great students"
+def print_footer
+  if @students.count > 1
+    puts "Overall, we have #{@students.count} great students"
   else 
-    puts "We have #{names.count} great student"
+    puts "We have #{@students.count} great student"
   end
 end
 
