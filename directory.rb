@@ -2,6 +2,12 @@ require 'csv'
 
 @students = [] # accessible to all methods
 
+# Un-comment to show this file's source code to the console
+# filename = __FILE__
+# File.open(filename, "r") do |file|
+#     puts file.read
+# end
+
 def try_load_students
   puts "Enter filename to load, press enter for default"
   filename = gets.chomp
