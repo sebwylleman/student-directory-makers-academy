@@ -9,5 +9,3 @@ Manage the list of students who are enrolled at Villains Academy using the stude
 ```shell
 ruby directory.rb
 ```
-.
-.
